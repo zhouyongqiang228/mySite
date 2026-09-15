@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="skill-tree.css" />
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -48,7 +49,23 @@
       <article class="cap-card"><div class="cap-number">01</div><div class="cap-icon">⌘</div><h3>全栈产品研发</h3><p>跨平台应用、原生体验与云端服务，覆盖从架构设计到上线运营的完整生命周期。</p><div class="chips"><span>Flutter</span><span>Golang</span><span>iOS / Android</span></div></article>
       <article class="cap-card featured"><div class="cap-number">02</div><div class="cap-icon">✦</div><h3>游戏与实时体验</h3><p>用引擎和图形学搭建有趣、顺滑、能够被记住的互动世界。</p><div class="chips"><span>Unity</span><span>Cocos</span><span>Graphics</span></div></article>
       <article class="cap-card"><div class="cap-number">03</div><div class="cap-icon">◉</div><h3>LLM & AI Agent</h3><p>把模型能力接入真实工作流，构建会思考、能行动的下一代产品。</p><div class="chips"><span>Agents</span><span>RAG</span><span>LLM Apps</span></div></article>
-    </div></div></section>
+    </div>
+    <section id="skills" class="skill-tree" aria-labelledby="skill-tree-title">
+      <div class="skill-tree-heading"><div><p class="tree-kicker">A LIVING MAP OF WHAT I BUILD WITH</p><h3 id="skill-tree-title">让知识，向外生长<span>。</span></h3></div><span class="tree-edition">INTERACTIVE ATLAS / 01</span></div>
+      <div class="tree-filters" role="group" aria-label="按领域查看技能"></div>
+      <div class="tree-layout">
+        <div class="tree-stage" aria-label="可拖动旋转的三维技能树">
+          <canvas class="tree-canvas" aria-hidden="true"></canvas>
+          <div class="tree-nodes" role="group" aria-label="技能节点"></div>
+          <div class="tree-stage-caption" aria-hidden="true"><span class="tree-live-dot"></span> KNOWLEDGE, CONNECTED.</div>
+          <div class="tree-toolbar"><span>拖动旋转 · 点击探索</span><div><button type="button" class="tree-motion" aria-pressed="true">暂停转动</button><button type="button" class="tree-reset">重置视角</button></div></div>
+        </div>
+        <aside class="tree-detail" aria-label="当前技能介绍" aria-live="polite" aria-atomic="true"></aside>
+      </div>
+      <div class="tree-footer"><span>扎根于代码，生长于不同领域。</span><span>CODE → CREATE → CONNECT</span></div>
+      <noscript><p class="tree-fallback">基础编程：C、C++ · 产品研发：Flutter、Golang、iOS / Android · 游戏与图形：Unity、Cocos、Graphics · 人工智能：LLM、RAG、AI Agent · 医学计算：医学影像、解剖学。</p></noscript>
+    </section>
+    </div></section>
 
     <section id="proof" class="section wrap proof"><div class="section-label"><span>03</span><span class="label-line"></span><span>SELECTED PROOF</span></div><div class="proof-layout"><div><h2>做过的事，<br><span>会留下回声。</span></h2><p class="proof-note">每一次发布，都是一次把不确定性变成确定性的练习。</p></div><div class="timeline"><div class="time-item"><span class="time">NOW</span><div><h3>AI × 医学影像</h3><p>正在探索解剖学知识、视觉理解与智能工具之间的新连接。</p></div></div><div class="time-item"><span class="time">02</span><div><h3>低代码游戏开发平台</h3><p>让创作者用更少的代码，把创意快速带到可玩的状态。</p></div></div><div class="time-item"><span class="time">01</span><div><h3>独立游戏产品</h3><p>独立完成研发与发行，进入中国 iOS 游戏排行榜前 30，美国前 400。</p></div></div></div></div></section>
 
@@ -56,5 +73,6 @@
   </main>
   <footer class="footer wrap"><span>© 2026 ALEX / LAB</span><span>BUILT WITH CURIOSITY + CODE</span><a href="#top">BACK TO TOP ↑</a></footer>
   <script src="script.js"></script>
+  <script src="skill-tree.js"></script>
 </body>
 </html>
