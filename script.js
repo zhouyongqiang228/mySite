@@ -1,6 +1,47 @@
-const canvas = document.getElementById('network');
-const ctx = canvas.getContext('2d');
-let points = [];
-function resize(){ canvas.width=innerWidth*devicePixelRatio; canvas.height=innerHeight*devicePixelRatio; ctx.scale(devicePixelRatio,devicePixelRatio); points=Array.from({length:Math.min(55,Math.floor(innerWidth/24))},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vx:(Math.random()-.5)*.18,vy:(Math.random()-.5)*.18})); }
-function draw(){ const w=innerWidth,h=innerHeight; ctx.clearRect(0,0,w,h); points.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>w)p.vx*=-1;if(p.y<0||p.y>h)p.vy*=-1;}); points.forEach((p,i)=>{points.slice(i+1).forEach(q=>{const d=Math.hypot(p.x-q.x,p.y-q.y);if(d<125){ctx.strokeStyle=`rgba(183,245,201,${(1-d/125)*.14})`;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.stroke();}});ctx.fillStyle='rgba(183,245,201,.3)';ctx.fillRect(p.x,p.y,1.5,1.5);});requestAnimationFrame(draw); }
-addEventListener('resize',resize); resize(); draw();
+(() => {
+  const toggle = document.querySelector('.menu-toggle');
+  const menu = document.getElementById('mobile-nav');
+  const setMenu = open => {
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? '关闭导航' : '打开导航');
+    menu.hidden = !open;
+  };
+  toggle.addEventListener('click', () => setMenu(menu.hidden));
+  menu.addEventListener('click', event => { if (event.target.closest('a')) setMenu(false); });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !menu.hidden) { setMenu(false); toggle.focus(); }
+  });
+  matchMedia('(min-width: 801px)').addEventListener('change', event => { if (event.matches) setMenu(false); });
+  const navLinks = [...document.querySelectorAll('.desktop-nav a')];
+  const sectionObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      navLinks.forEach(link => {
+        if (link.hash === `#${entry.target.id}`) link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+      });
+    });
+  }, { rootMargin: '-15% 0px -55% 0px' });
+  navLinks.forEach(link => { const target = document.querySelector(link.hash); if (target) sectionObserver.observe(target); });
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const intro = '你好，我是 Alex，优先寻找医学 AI 软件开发岗位，也关注企业业务自动化顾问、AI Agent 和游戏开发机会。具备解剖学、影像学知识，以及 TensorFlow、C++、Python、Go、Unity、Cocos、Flutter 等技术能力。项目经验覆盖游戏引擎、低代码平台、自研脚本语言、图像视频处理、识图模型、服务器与多平台应用。期待交流岗位需求和具体业务问题。';
+  const status = document.getElementById('action-status');
+  document.getElementById('copy-intro').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(intro);
+      status.textContent = '求职简介已复制，可以粘贴到消息或邮件中。';
+    } catch {
+      status.textContent = '自动复制不可用，请选中下方文字复制。';
+      let text = document.getElementById('copy-fallback');
+      if (!text) {
+        text = document.createElement('textarea'); text.id = 'copy-fallback'; text.readOnly = true;
+        text.setAttribute('aria-label', '求职简介，可手动复制');
+        text.style.cssText = 'width:100%;min-height:150px;margin-top:12px;padding:12px;border:1px solid #8eaa79;border-radius:4px;background:#f0f7e7;color:#24371e;font-family:inherit;font-size:12px;line-height:1.8;';
+        status.after(text);
+      }
+      text.value = intro; text.focus(); text.select();
+    }
+  });
+  document.getElementById('print-profile').addEventListener('click', () => window.print());
+})();

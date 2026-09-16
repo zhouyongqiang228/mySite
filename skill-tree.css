@@ -22,3 +22,19 @@
 .skill-tree[data-layout="narrow"] .tree-root { font-size: 10px; line-height: 13px; padding: 2px; }
 .skill-tree[data-layout="narrow"] .tree-footer { padding: 14px 16px; }
 .skill-tree[data-layout="narrow"] .tree-footer span:last-child { display: none; }
+/* The skill sphere is part of the first-screen composition. */
+.hero-sphere.skill-tree { margin:0; max-width:none; min-width:0; background:transparent; border:0; border-radius:0; }
+.hero-sphere .skill-tree-heading { padding:15px 10px 0; border:0; align-items:flex-start; }
+.hero-sphere .tree-kicker { color:#74876b; font-size:7px; letter-spacing:.1em; margin-bottom:7px; }
+.hero-sphere .skill-tree-heading h2 { font-size:13px; line-height:1.6; letter-spacing:.025em; color:#b6c7a9; font-weight:400; }
+.sphere-index { font:8px var(--mono); color:#68805b; padding-top:3px; }
+.hero-sphere .tree-stage { background:radial-gradient(ellipse at 50% 47%,#47642b21,transparent 63%); }
+.hero-sphere .tree-label { background:#101713d9; color:#d4e3c9; }
+.hero-sphere .tree-root { background:#172517; border-color:#344b2b; color:#b9d5a3; font-size:10px; box-shadow:none; }
+.hero-sphere .tree-footer { border-top:1px solid #2b3a27; padding:13px 10px 10px; gap:12px; align-items:center; }
+.hero-sphere .tree-footer>span { display:flex; align-items:center; gap:7px; font:7px var(--mono); letter-spacing:.07em; color:#7e976e; }
+.hero-sphere .tree-count { color:#8aa17c; font-size:8px; }
+.hero-sphere.skill-tree[data-layout="narrow"] .skill-tree-heading { padding:15px 10px 0; flex-wrap:nowrap; gap:12px; }
+.hero-sphere.skill-tree[data-layout="narrow"] .tree-footer { padding:12px 10px; }
+.hero-sphere.skill-tree[data-layout="narrow"] .tree-footer span:last-child { display:flex; }
+@media(max-width:520px){.hero-sphere .tree-count{font-size:7px}.hero-sphere .tree-footer>span{font-size:6px}}
