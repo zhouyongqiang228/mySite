@@ -1,36 +1,24 @@
-.skill-tree { margin-top: 72px; border: 1px solid #293b30; background: #0a1010; position: relative; scroll-margin-top: 24px; }
-.skill-tree-heading { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 32px; border-bottom: 1px solid #203027; }
-.tree-kicker { color: #879e8d; font: 9px var(--mono); letter-spacing: .12em; margin-bottom: 14px; }
-.skill-tree-heading h3 { font-size: clamp(24px, 3vw, 34px); font-weight: 500; letter-spacing: -.04em; }
+.skill-tree { margin: 64px auto 0; max-width: 760px; border: 1px solid #293b30; border-radius: 18px; background: #0a1010; position: relative; scroll-margin-top: 24px; }
+.skill-tree-heading { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 26px 28px 22px; border-bottom: 1px solid #203027; }
+.tree-kicker { color: #879e8d; font: 8px var(--mono); letter-spacing: .12em; margin-bottom: 12px; }
+.skill-tree-heading h3 { font-size: clamp(22px, 3vw, 29px); font-weight: 500; letter-spacing: -.04em; }
 .skill-tree-heading h3 span { color: var(--mint); }
-.tree-intro { margin-top: 12px; font-size: 12px; color: #8da293; line-height: 1.8; }
-.tree-edition { display: grid; gap: 10px; text-align: right; flex-shrink: 0; }
-.tree-edition > span { color: #c1e5c7; font-size: 12px; }
-.tree-count { color: #83998a; font-size: 10px; }
-.tree-stage { position: relative; width: 100%; background: radial-gradient(ellipse at 50% 80%, #26463124, transparent 65%), radial-gradient(ellipse at 40% 20%, #24443915, transparent 60%); }
+.tree-intro { margin-top: 10px; font-size: 11px; color: #8da293; line-height: 1.8; }
+.tree-edition { display: grid; gap: 8px; text-align: right; flex-shrink: 0; }
+.tree-edition > span { color: #c1e5c7; font-size: 11px; }
+.tree-count { color: #83998a; font-size: 9px; }
+.tree-stage { position: relative; width: 100%; background: radial-gradient(ellipse at 50% 47%, #33583d24, transparent 63%); }
 .tree-canvas, .tree-nodes { position: absolute; inset: 0; width: 100%; height: 100%; }
 .tree-canvas { pointer-events: none; }
-.tree-label { position: absolute; white-space: nowrap; color: #d4e3d7; font: 12px/22px var(--sans); }
-.tree-leaf[data-side="left"] { transform: translate(calc(-100% - 12px), -50%); text-align: right; }
-.tree-leaf[data-side="right"] { transform: translate(12px, -50%); }
-.tree-leaf span { background: #0a1010b3; padding: 3px 0; }
-.tree-branch { color: var(--branch-color); font-size: 13px; font-weight: 600; letter-spacing: .035em; }
-.tree-branch span { padding: 5px 9px; background: #0d1a14; border: 1px solid #294032; border-radius: 4px; }
-.tree-branch[data-side="center"] { transform: translate(-50%, -50%); }
-.tree-root { color: var(--mint); font-size: 13px; letter-spacing: .1em; }
-.tree-root span { background: #0d1a14; border-color: #476b4e; padding: 7px 15px; }
-.tree-footer { display: flex; justify-content: space-between; gap: 16px; border-top: 1px solid #24312b; padding: 16px 26px; color: #829c8c; font-size: 10px; }
+.tree-label { position: absolute; transform: translateX(-50%); transform-origin: center top; text-align: center; box-sizing: border-box; color: #d4e3d7; font: 11px/16px var(--sans); overflow-wrap: anywhere; padding: 2px 3px; border-radius: 5px; background: #0a1010d9; }
+.tree-root { color: var(--mint); font-size: 12px; font-weight: 600; line-height: 17px; letter-spacing: .03em; padding: 4px 3px; border: 1px solid #3c5941; background: #112117; box-shadow: 0 0 28px #b7f5c910; }
+.tree-footer { display: flex; justify-content: space-between; gap: 16px; border-top: 1px solid #24312b; padding: 15px 26px; color: #829c8c; font-size: 10px; }
 .tree-footer span:last-child { font: 8px var(--mono); letter-spacing: .1em; color: #6f8777; }
 .tree-fallback { padding: 24px; font-size: 13px; line-height: 2; }
-@media (max-width: 900px) and (min-width: 700px) { .tree-label { font-size: 11px; } }
-
-.skill-tree[data-layout="narrow"] .skill-tree-heading { padding: 24px 20px; flex-wrap: wrap; gap: 18px; }
-.skill-tree[data-layout="narrow"] .tree-edition { display: flex; align-items: center; text-align: left; gap: 14px; }
-.skill-tree[data-layout="narrow"] .tree-kicker { font-size: 8px; }
-.skill-tree[data-layout="narrow"] .tree-stage { background: radial-gradient(ellipse at 0% 50%, #26463124, transparent 75%); }
-.skill-tree[data-layout="narrow"] .tree-label { font-size: 12px; }
-.skill-tree[data-layout="narrow"] .tree-branch { font-size: 13px; }
-.skill-tree[data-layout="narrow"] .tree-branch[data-side="mobile-branch"] { transform: translateY(-50%); }
-.skill-tree[data-layout="narrow"] .tree-root[data-side="mobile-root"] { transform: translateY(-50%); }
-.skill-tree[data-layout="narrow"] .tree-footer { padding: 16px 20px; }
+.skill-tree[data-layout="narrow"] .skill-tree-heading { padding: 20px 16px; flex-wrap: wrap; gap: 14px; }
+.skill-tree[data-layout="narrow"] .tree-edition { display: flex; align-items: center; text-align: left; gap: 12px; }
+.skill-tree[data-layout="narrow"] .tree-kicker { font-size: 7px; }
+.skill-tree[data-layout="narrow"] .tree-label { font-size: 10px; line-height: 13px; padding: 1px 2px; }
+.skill-tree[data-layout="narrow"] .tree-root { font-size: 10px; line-height: 13px; padding: 2px; }
+.skill-tree[data-layout="narrow"] .tree-footer { padding: 14px 16px; }
 .skill-tree[data-layout="narrow"] .tree-footer span:last-child { display: none; }

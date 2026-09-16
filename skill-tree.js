@@ -1,4 +1,4 @@
-// One fully expanded botanical tree. Labels never rotate, collapse or disappear.
+// A continuously rotating, perspective-projected sphere of final skill nodes.
 (() => {
   const root = document.querySelector('.skill-tree');
   const catalog = window.skillCatalog;
@@ -10,103 +10,157 @@
   const nodes = [], byId = new Map();
   const mint = '#b7f5c9';
   const colors = { medical: '#a1d7c3', ai: '#e5c59d', development: mint };
-  function visit(node, parent = null, domain = null) {
-    const entry = { ...node, parent: parent?.id || null, domain: parent?.id === 'root' ? node.id : domain, leaf: !node.children?.length };
-    entry.color = colors[entry.domain] || mint;
-    const label = document.createElement('div');
-    label.className = `tree-label ${entry.leaf ? 'tree-leaf' : 'tree-branch'}${node.id === 'root' ? ' tree-root' : ''}`;
-    label.dataset.skill = node.id;
-    label.setAttribute('role', 'listitem');
-    label.style.setProperty('--branch-color', entry.color);
-    const name = document.createElement('span');
-    name.textContent = node.name; label.append(name);
-    const ancestry = [];
-    for (let p = parent; p; p = byId.get(p.parent)) ancestry.unshift(p.name);
-    label.setAttribute('aria-label', [...ancestry, node.name].join(' / '));
-    entry.element = label;
-    layer.append(label); nodes.push(entry); byId.set(node.id, entry);
-    (node.children || []).forEach(child => visit(child, entry, entry.domain));
+  function visit(node, ancestors = [], domain = null) {
+    const path = [...ancestors, node.name];
+    const branch = ancestors.length === 1 ? node.id : domain;
+    if (node.id === 'root' || !node.children?.length) {
+      const entry = { ...node, parent: node.id === 'root' ? null : 'root', leaf: node.id !== 'root', color: colors[branch] || mint };
+      const label = document.createElement('div');
+      label.className = `tree-label ${entry.leaf ? 'tree-leaf' : 'tree-root'}`;
+      label.dataset.skill = node.id;
+      label.setAttribute('role', 'listitem');
+      label.style.setProperty('--branch-color', entry.color);
+      label.textContent = node.name;
+      label.setAttribute('aria-label', path.join(' / '));
+      entry.element = label;
+      layer.append(label); nodes.push(entry); byId.set(node.id, entry);
+    }
+    (node.children || []).forEach(child => visit(child, path, branch));
   }
   visit(catalog);
-  root.querySelector('.tree-count').textContent = `${nodes.filter(node => node.leaf).length} 项技能与经验 · 完整呈现`;
-  const development = byId.get('development');
-  // Keep whole subbranches together and balance the two sides by leaf count.
-  const left = [byId.get('medical')], right = [byId.get('ai')];
-  const weight = groups => groups.reduce((total, node) => total + node.children.length + 2, 0);
-  [...(development?.children || [])].sort((a, b) => b.children.length - a.children.length).forEach(node => {
-    (weight(left) <= weight(right) ? left : right).push(byId.get(node.id));
+  const leaves = nodes.filter(node => node.leaf);
+  root.querySelector('.tree-count').textContent = `${leaves.length} 项技能与经验 · 持续生长`;
+  const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+  leaves.forEach((node, i) => {
+    const y = 1 - 2 * (i + .5) / leaves.length;
+    const ring = Math.sqrt(1 - y * y), a = i * goldenAngle;
+    node.position = [Math.cos(a) * ring, y, Math.sin(a) * ring];
   });
-  let width = 1, height = 1, edges = [], visible = false, frame = 0, time = 0, last = 0;
+  const normalize = vector => { const length = Math.hypot(...vector) || 1; return vector.map(value => value / length); };
+  const mesh = [], connected = new Set();
+  leaves.forEach((node, i) => {
+    const neighbors = leaves.map((other, j) => ({ j, distance: Math.hypot(...other.position.map((v, k) => v - node.position[k])) }))
+      .filter(item => item.j !== i).sort((a, b) => a.distance - b.distance).slice(0, 3);
+    neighbors.forEach(({ j }) => {
+      const key = [i, j].sort((a, b) => a - b).join(':');
+      if (connected.has(key)) return;
+      connected.add(key);
+      const other = leaves[j];
+      mesh.push({ color: node.color, points: Array.from({ length: 13 }, (_, k) => normalize(node.position.map((v, axis) => v + (other.position[axis] - v) * k / 12))) });
+    });
+  });
+  const guides = [];
+  for (const latitude of [-.55, 0, .55]) {
+    const r = Math.sqrt(1 - latitude * latitude);
+    guides.push(Array.from({ length: 81 }, (_, i) => [Math.cos(i / 80 * Math.PI * 2) * r, latitude, Math.sin(i / 80 * Math.PI * 2) * r]));
+  }
+  for (let meridian = 0; meridian < 4; meridian++) {
+    const angle = meridian / 4 * Math.PI;
+    guides.push(Array.from({ length: 81 }, (_, i) => {
+      const a = i / 80 * Math.PI * 2;
+      return [Math.cos(a) * Math.cos(angle), Math.sin(a), Math.cos(a) * Math.sin(angle)];
+    }));
+  }
+  let width = 1, height = 1, radius = 1, visible = false, frame = 0, time = 0, last = 0;
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-  function place(node, x, y, side, labelX = x, labelY = y) {
-    node.x = x; node.y = y;
-    node.element.dataset.side = side;
-    node.element.style.left = `${labelX}px`; node.element.style.top = `${labelY}px`;
+  function project([x, y, z]) {
+    const angle = time * .15 + .35;
+    const rx = x * Math.cos(angle) + z * Math.sin(angle);
+    const rz = -x * Math.sin(angle) + z * Math.cos(angle);
+    const ry = y * Math.cos(.24) - rz * Math.sin(.24);
+    const depth = y * Math.sin(.24) + rz * Math.cos(.24);
+    const perspective = 4.5 / (4.5 - depth);
+    return { x: width / 2 + rx * radius * perspective, y: height * .47 - ry * radius * perspective, depth, scale: .82 + (depth + 1) * .12 };
   }
   function layout() {
     width = Math.max(1, stage.clientWidth);
-    const narrow = width < 700, row = narrow ? 35 : 32, gap = narrow ? 54 : 76;
-    root.dataset.layout = narrow ? 'narrow' : 'wide';
-    const measure = groups => groups.reduce((n, group) => n + group.children.length * row + gap, 0);
-    const slots = narrow ? [[left[0], right[0], ...(development?.children || []).map(n => byId.get(n.id))]] : [left, right];
-    height = Math.max(...slots.map(measure)) + (narrow ? 166 : 182);
+    height = Math.max(width, 390);
+    radius = Math.min(width * .355, height * .355);
+    root.dataset.layout = width < 540 ? 'narrow' : 'wide';
     stage.style.height = `${height}px`;
-    const center = width / 2, rootX = narrow ? 29 : center;
-    place(byId.get('root'), rootX, height - 92, narrow ? 'mobile-root' : 'center', narrow ? 50 : center, height - 72);
-    const devY = narrow ? 2 * gap + (left[0].children.length + right[0].children.length) * row + 25 : height - 215;
-    place(development, rootX, devY, narrow ? 'mobile-branch' : 'center', narrow ? 48 : center, narrow ? devY - 16 : devY - 24);
-    slots.forEach((groups, column) => {
-      let y = narrow ? 76 : 58;
-      groups.forEach(group => {
-        const side = narrow ? 'right' : column ? 'right' : 'left', sign = column ? 1 : -1;
-        const hubX = narrow ? 70 : center + sign * width * .145;
-        const leafX = narrow ? 98 : column ? width - Math.min(215, width * .255) : Math.min(215, width * .255);
-        const firstY = y;
-        group.children.forEach((child, index) => place(byId.get(child.id), leafX, y + index * row, side));
-        const middleY = firstY + (group.children.length - 1) * row / 2;
-        place(group, hubX, narrow ? firstY - 25 : middleY, narrow ? 'mobile-branch' : 'center', narrow ? hubX + 8 : hubX, narrow ? firstY - 27 : middleY - 24);
-        y += group.children.length * row + gap;
-      });
+    leaves.forEach(node => {
+      const font = width < 540 ? 10 : 11;
+      const estimated = [...node.name].reduce((n, c) => n + (c.charCodeAt(0) > 255 ? font : font * .75), 12);
+      node.labelWidth = Math.min(width < 540 ? 90 : 120, Math.max(38, estimated));
+      node.element.style.width = `${node.labelWidth}px`;
+      node.labelHeight = node.element.offsetHeight || Math.ceil(estimated / node.labelWidth) * (width < 540 ? 13 : 16) + 4;
+      node.label = null;
     });
-    edges = nodes.filter(node => node.parent).map(node => {
-      const parent = byId.get(node.parent);
-      const start = { x: parent.x, y: parent.y }, end = { x: node.x, y: node.y }, delta = end.x - start.x;
-      return { start, end, c1: { x: start.x + delta * .22, y: start.y }, c2: { x: start.x + delta * .55, y: end.y }, color: node.color, trunk: !node.leaf };
-    });
+    const center = byId.get('root');
+    center.element.style.left = `${width / 2}px`; center.element.style.top = `${height - 36}px`;
+    center.element.style.width = '110px';
     if (ctx) {
       const ratio = Math.min(devicePixelRatio || 1, 2);
       canvas.width = Math.round(width * ratio); canvas.height = Math.round(height * ratio);
-      ctx.setTransform(ratio, 0, 0, ratio, 0, 0); draw();
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
     }
+    draw();
   }
-  function point(edge, t) {
-    const u = 1 - t;
-    return {
-      x: u ** 3 * edge.start.x + 3 * u * u * t * edge.c1.x + 3 * u * t * t * edge.c2.x + t ** 3 * edge.end.x,
-      y: u ** 3 * edge.start.y + 3 * u * u * t * edge.c1.y + 3 * u * t * t * edge.c2.y + t ** 3 * edge.end.y,
-    };
+  function drawCurve(points, color, alpha) {
+    const projected = points.map(project);
+    ctx.strokeStyle = color; ctx.lineWidth = .65;
+    for (let i = 1; i < projected.length; i++) {
+      const a = projected[i - 1], b = projected[i];
+      ctx.globalAlpha = alpha * (.35 + ((a.depth + b.depth) / 2 + 1) * .325);
+      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+    }
   }
   function draw() {
+    const projected = leaves.map(node => ({ node, ...project(node.position) }));
+    // Labels face the reader; their scale and brightness communicate depth.
+    // Relax nearby labels around their true anchors instead of hiding any skills.
+    const labels = projected.map(p => ({ ...p, lx: p.x, ly: p.y + 9, w: p.node.labelWidth * p.scale, h: p.node.labelHeight * p.scale }));
+    for (let pass = 0; pass < 9; pass++) {
+      for (let i = 0; i < labels.length; i++) for (let j = i + 1; j < labels.length; j++) {
+        const a = labels[i], b = labels[j];
+        const dx = b.lx - a.lx, dy = (b.ly + b.h / 2) - (a.ly + a.h / 2);
+        const overlapX = (a.w + b.w) / 2 + 4 - Math.abs(dx), overlapY = (a.h + b.h) / 2 + 3 - Math.abs(dy);
+        if (overlapX <= 0 || overlapY <= 0) continue;
+        if (overlapY < overlapX) { const push = (dy < 0 ? -1 : 1) * overlapY * .51; a.ly -= push; b.ly += push; }
+        else { const push = (dx < 0 ? -1 : 1) * overlapX * .51; a.lx -= push; b.lx += push; }
+      }
+      labels.forEach(p => {
+        p.lx = Math.max(p.w / 2 + 8, Math.min(width - p.w / 2 - 8, p.lx));
+        p.ly = Math.max(12, Math.min(height - 65 - p.h, p.ly));
+      });
+    }
+    labels.forEach(p => {
+      const old = p.node.label;
+      const smooth = old && !reducedMotion.matches ? .18 : 1;
+      const x = old ? old.x + (p.lx - old.x) * smooth : p.lx;
+      const y = old ? old.y + (p.ly - old.y) * smooth : p.ly;
+      p.node.label = { x, y };
+      const style = p.node.element.style;
+      style.left = `${x}px`; style.top = `${y}px`;
+      style.transform = `translateX(-50%) scale(${p.scale})`;
+      style.opacity = String(.4 + (p.depth + 1) * .3);
+      style.zIndex = String(Math.round(100 + p.depth * 50));
+    });
     if (!ctx) return;
     ctx.clearRect(0, 0, width, height);
-    const origin = byId.get('root');
-    ctx.strokeStyle = mint; ctx.lineWidth = 1;
-    // Flattened rings keep the original botanical tree's spatial grounding.
-    if (width >= 700) for (const radius of [48, 88, 140, 198]) {
-      ctx.globalAlpha = .055; ctx.beginPath();
-      ctx.ellipse(origin.x, height - 40, radius, radius * .095, 0, 0, Math.PI * 2); ctx.stroke();
-    }
-    edges.forEach((edge, index) => {
-      ctx.beginPath(); ctx.moveTo(edge.start.x, edge.start.y);
-      ctx.bezierCurveTo(edge.c1.x, edge.c1.y, edge.c2.x, edge.c2.y, edge.end.x, edge.end.y);
-      ctx.strokeStyle = edge.color; ctx.globalAlpha = edge.trunk ? .3 : .22; ctx.lineWidth = edge.trunk ? 1.5 : .8; ctx.stroke();
-      const p = point(edge, (time * .055 + index * .173) % 1);
-      ctx.globalAlpha = edge.trunk ? .65 : .4; ctx.shadowColor = edge.color; ctx.shadowBlur = 7;
-      ctx.fillStyle = edge.color; ctx.beginPath(); ctx.arc(p.x, p.y, edge.trunk ? 1.8 : 1.2, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
+    const glow = ctx.createRadialGradient(width * .45, height * .42, 0, width / 2, height * .47, radius * 1.15);
+    glow.addColorStop(0, '#b7f5c90c'); glow.addColorStop(.6, '#73b89008'); glow.addColorStop(1, '#73b89000');
+    ctx.fillStyle = glow; ctx.fillRect(0, 0, width, height);
+    guides.forEach(points => drawCurve(points, mint, .13));
+    mesh.forEach((edge, index) => {
+      drawCurve(edge.points, edge.color, .23);
+      if (index % 3) return;
+      const t = (time * .13 + index * .17) % 1, position = t * (edge.points.length - 1);
+      const a = edge.points[Math.floor(position)], b = edge.points[Math.min(edge.points.length - 1, Math.floor(position) + 1)];
+      const p = project(normalize(a.map((v, i) => v + (b[i] - v) * (position % 1))));
+      ctx.globalAlpha = .25 + (p.depth + 1) * .25;
+      ctx.fillStyle = edge.color; ctx.shadowColor = edge.color; ctx.shadowBlur = 7;
+      ctx.beginPath(); ctx.arc(p.x, p.y, 1.3 * p.scale, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
     });
-    nodes.forEach(node => {
-      ctx.globalAlpha = node.leaf ? .75 : .95; ctx.fillStyle = node.color; ctx.shadowColor = node.color; ctx.shadowBlur = node.leaf ? 6 : 12;
-      ctx.beginPath(); ctx.arc(node.x, node.y, node.id === 'root' ? 5 : node.leaf ? 2 : 3.5, 0, Math.PI * 2); ctx.fill();
+    projected.sort((a, b) => a.depth - b.depth).forEach(p => {
+      const label = p.node.label;
+      if (Math.hypot(label.x - p.x, label.y - p.y) > 18) {
+        ctx.strokeStyle = p.node.color; ctx.globalAlpha = .12;
+        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(label.x, label.y); ctx.stroke();
+      }
+      ctx.globalAlpha = .35 + (p.depth + 1) * .3; ctx.fillStyle = p.node.color;
+      ctx.shadowColor = p.node.color; ctx.shadowBlur = 4 + (p.depth + 1) * 4;
+      ctx.beginPath(); ctx.arc(p.x, p.y, 2.2 * p.scale, 0, Math.PI * 2); ctx.fill();
     });
     ctx.globalAlpha = 1; ctx.shadowBlur = 0;
   }
@@ -115,7 +169,7 @@
     last = timestamp; draw(); schedule();
   }
   function schedule() {
-    if (ctx && visible && !document.hidden && !reducedMotion.matches && !frame) frame = requestAnimationFrame(animate);
+    if (visible && !document.hidden && !reducedMotion.matches && !frame) frame = requestAnimationFrame(animate);
   }
   function syncAnimation() {
     if (frame) cancelAnimationFrame(frame);
