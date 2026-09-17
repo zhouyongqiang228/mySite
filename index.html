@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=8" />
+  <link rel="stylesheet" href="styles.css?v=9" />
   <link rel="stylesheet" href="skill-tree.css?v=8" />
   <script src="script.js?v=8" defer></script>
   <script src="skill-data.js?v=8" defer></script>
@@ -21,11 +21,11 @@
   <header class="site-header">
     <div class="header-inner wrap">
       <a class="brand" href="#top" aria-label="Alex 个人主页"><span class="brand-mark">a<span>↗</span></span><span>alex<span class="brand-slash"> / </span>lab</span></a>
-      <nav class="desktop-nav" aria-label="主导航"><a href="#focus">求职方向</a><a href="#experience">项目经验</a><a href="#stack">技术能力</a><a href="#about">关于我</a></nav>
+      <nav class="desktop-nav" aria-label="主导航"><a href="#focus">求职方向</a><a href="#work">工作经历</a><a href="#experience">项目经验</a><a href="#stack">技术能力</a><a href="#about">关于我</a></nav>
       <a class="header-contact" href="#contact"><span class="live-dot"></span>聊聊机会 <span aria-hidden="true">↗</span></a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="打开导航"><span></span><span></span></button>
     </div>
-    <nav id="mobile-nav" class="mobile-nav" aria-label="移动端导航" hidden><a href="#focus">求职方向</a><a href="#experience">项目经验</a><a href="#stack">技术能力</a><a href="#about">关于我</a><a href="#contact">联系与合作 ↗</a></nav>
+    <nav id="mobile-nav" class="mobile-nav" aria-label="移动端导航" hidden><a href="#focus">求职方向</a><a href="#work">工作经历</a><a href="#experience">项目经验</a><a href="#stack">技术能力</a><a href="#about">关于我</a><a href="#contact">联系与合作 ↗</a></nav>
   </header>
 
   <main id="main">
@@ -60,8 +60,46 @@
       </div>
     </section>
 
+    <section class="section wrap work-section" id="work" aria-labelledby="work-title">
+      <div class="section-topline"><span class="eyebrow">02 / MY CAREER JOURNEY</span><span class="section-note">工作经历 · 示例</span></div>
+      <div class="section-heading"><h2 id="work-title">在不同团队，<br><span>持续打磨工程能力。</span></h2><p>从游戏与跨平台应用，到业务自动化与 AI 工具。<br>在一次次实践中，连接技术与真实需求。</p></div>
+      <!-- 示例工作经历：请按实际情况替换年份、公司、职位、工作内容和技术标签。 -->
+      <ol class="work-timeline">
+        <li class="work-entry">
+          <div class="work-period"><time datetime="2024">2024</time><span aria-hidden="true"> — </span><span class="work-time-separator">至</span><time datetime="2026">2026</time></div>
+          <article class="work-detail" aria-labelledby="work-role-1">
+            <p class="work-company">知序智能科技有限公司</p>
+            <h3 id="work-role-1">AI 应用开发工程师</h3>
+            <p class="work-summary">围绕知识检索与工具调用，参与面向业务场景的 AI 应用研发。</p>
+            <ul class="work-responsibilities"><li>开发知识助手与 Agent 工作流，连接文档、模型和业务工具。</li><li>参与数据处理、服务接口与应用界面开发，持续完善异常处理和使用体验。</li></ul>
+            <div class="tags"><span>Python</span><span>LLM / RAG</span><span>AI Agent</span></div>
+          </article>
+        </li>
+        <li class="work-entry">
+          <div class="work-period"><time datetime="2021">2021</time><span aria-hidden="true"> — </span><span class="work-time-separator">至</span><time datetime="2024">2024</time></div>
+          <article class="work-detail" aria-labelledby="work-role-2">
+            <p class="work-company">青禾数字科技有限公司</p>
+            <h3 id="work-role-2">软件开发工程师</h3>
+            <p class="work-summary">参与企业内部工具与低代码平台开发，将重复业务流程转化为可复用的软件能力。</p>
+            <ul class="work-responsibilities"><li>开发自动化脚本、数据处理工具与业务接口，支持跨系统信息流转。</li><li>参与平台组件和跨平台客户端建设，协同梳理需求、交付功能并跟进迭代。</li></ul>
+            <div class="tags"><span>Go / Python</span><span>低代码平台</span><span>业务自动化</span></div>
+          </article>
+        </li>
+        <li class="work-entry">
+          <div class="work-period"><time datetime="2018">2018</time><span aria-hidden="true"> — </span><span class="work-time-separator">至</span><time datetime="2021">2021</time></div>
+          <article class="work-detail" aria-labelledby="work-role-3">
+            <p class="work-company">星屿互动科技有限公司</p>
+            <h3 id="work-role-3">游戏与客户端开发工程师</h3>
+            <p class="work-summary">参与游戏及多平台客户端研发，积累从交互逻辑到产品交付的工程经验。</p>
+            <ul class="work-responsibilities"><li>开发游戏交互、界面系统与配套编辑工具，支持内容制作和功能迭代。</li><li>参与客户端与服务端联调、性能优化及移动平台适配。</li></ul>
+            <div class="tags"><span>C++ / C#</span><span>Unity / Cocos</span><span>跨平台开发</span></div>
+          </article>
+        </li>
+      </ol>
+    </section>
+
     <section class="experience-section section" id="experience" aria-labelledby="experience-title"><div class="wrap">
-      <div class="section-topline"><span class="eyebrow">02 / EXPERIENCE THAT CONNECTS</span><span class="section-note">项目经验</span></div>
+      <div class="section-topline"><span class="eyebrow">03 / EXPERIENCE THAT CONNECTS</span><span class="section-note">项目经验</span></div>
       <div class="section-heading"><h2 id="experience-title">经历不止一种，<br><span>交付有同一条主线。</span></h2><p>从编程语言、引擎和平台，到面对真实用户的软件。<br>不同项目，积累的是可以迁移的工程能力。</p></div>
       <div class="experience-grid">
         <article class="experience-card"><div class="experience-visual visual-code" aria-hidden="true"><div class="mini-window"><div class="window-dots"><i></i><i></i><i></i><span>idea.to.product</span></div><div class="code-line"><span>01</span><b>idea</b> → <em>script</em></div><div class="code-line"><span>02</span><b>script</b> → <em>workflow</em></div><div class="code-line"><span>03</span><b>workflow</b> → <em>product</em></div><div class="code-cursor"></div></div><span class="visual-label">LESS REPETITION. MORE CREATION.</span></div><div class="experience-copy"><span class="experience-category">PLATFORMS & TOOLING</span><h3>把开发能力，变成创造工具</h3><p>低代码开发平台、自研脚本语言与编程语言开发经验，让我关注工具背后的抽象、流程和使用门槛。</p><div class="tags"><span>低代码平台</span><span>脚本系统</span><span>自动化工具</span></div></div></article>
@@ -72,7 +110,7 @@
     </div></section>
 
     <section class="section wrap stack-section" id="stack" aria-labelledby="stack-title">
-      <div class="section-topline"><span class="eyebrow">03 / A PRACTICAL TOOLKIT</span><span class="section-note">技术能力</span></div>
+      <div class="section-topline"><span class="eyebrow">04 / A PRACTICAL TOOLKIT</span><span class="section-note">技术能力</span></div>
       <div class="stack-layout"><div class="stack-intro"><h2 id="stack-title">选合适的技术，<br><span>解决具体的问题。</span></h2><p>从原生性能到跨平台界面，从数据处理到 AI 工作流。技术栈服务于问题，也服务于最终使用它的人。</p><a class="text-link" href="#skills">回到我的技能球 <span>↗</span></a></div><div class="stack-rows">
         <div class="stack-row"><span class="stack-label">01 / 医学与 AI</span><div class="skill-pills"><span>解剖学</span><span>影像学</span><span>TensorFlow</span><span>LLM</span><span>RAG</span><span>AI Agent</span></div></div>
         <div class="stack-row"><span class="stack-label">02 / 语言与表达</span><div class="skill-pills" data-catalog="languages"><span>C++</span><span>C</span><span>Go / Golang</span><span>C#</span><span>Python</span><span>JavaScript</span><span>Swift</span><span>Objective-C</span><span>Lua</span><span>Dart</span><span>HTML</span><span>Shader</span><span>SQL</span><span>自研脚本语言</span></div></div>
@@ -82,12 +120,12 @@
     </section>
 
     <section class="approach-section section" aria-labelledby="approach-title"><div class="wrap">
-      <div class="section-topline"><span class="eyebrow">04 / HOW I APPROACH A PROBLEM</span><span class="section-note">我的工作思路</span></div>
+      <div class="section-topline"><span class="eyebrow">05 / HOW I APPROACH A PROBLEM</span><span class="section-note">我的工作思路</span></div>
       <div class="section-heading"><h2 id="approach-title">先理解业务，<br><span>再让技术发挥作用。</span></h2><p>尤其在企业自动化与 AI 应用里，<br>一个清晰、可检验的小闭环，是更好的起点。</p></div>
       <ol class="approach-steps"><li><span>01 <b>↗</b></span><h3>理解问题</h3><p>梳理用户、业务流程与现有工具，找到真实的障碍。</p></li><li><span>02 <b>↗</b></span><h3>找到切入点</h3><p>明确输入、输出和验收方式，选择值得先解决的一步。</p></li><li><span>03 <b>↗</b></span><h3>构建最小闭环</h3><p>连接数据、模型与软件，尽早交付可运行的原型。</p></li><li><span>04 <b>↗</b></span><h3>在反馈里迭代</h3><p>检验效果、完善异常处理，让工具逐步进入实际流程。</p></li></ol>
     </div></section>
 
-    <section class="section wrap about-section" id="about" aria-labelledby="about-title"><div class="about-monogram" aria-hidden="true"><span>A</span><small>ALWAYS<br>BUILDING.</small></div><div class="about-copy"><p class="eyebrow">05 / A LITTLE ABOUT ME</p><h2 id="about-title">我是 Alex，<br>一个喜欢连接不同领域的开发者。</h2><p>我的经验横跨游戏、软件工具、开发平台和 AI 应用，也持续积累解剖学与影像学知识。我希望把这些经验带到医学 AI 软件研发中，让技术成为理解复杂信息、完成具体工作的工具。</p><p>我关注底层原理，也在意使用体验。对我来说，一个想法最有意思的时刻，是它开始被人真正使用的时候。</p><div class="about-signature">Alex <span>CODE WITH CURIOSITY.</span></div></div></section>
+    <section class="section wrap about-section" id="about" aria-labelledby="about-title"><div class="about-monogram" aria-hidden="true"><span>A</span><small>ALWAYS<br>BUILDING.</small></div><div class="about-copy"><p class="eyebrow">06 / A LITTLE ABOUT ME</p><h2 id="about-title">我是 Alex，<br>一个喜欢连接不同领域的开发者。</h2><p>我的经验横跨游戏、软件工具、开发平台和 AI 应用，也持续积累解剖学与影像学知识。我希望把这些经验带到医学 AI 软件研发中，让技术成为理解复杂信息、完成具体工作的工具。</p><p>我关注底层原理，也在意使用体验。对我来说，一个想法最有意思的时刻，是它开始被人真正使用的时候。</p><div class="about-signature">Alex <span>CODE WITH CURIOSITY.</span></div></div></section>
 
     <section class="contact-section" id="contact" aria-labelledby="contact-title"><div class="wrap contact-inner"><div><p class="eyebrow"><span class="live-dot"></span> OPEN TO THE NEXT CHAPTER</p><h2 id="contact-title">让下一个项目，<br>从一次交流开始<span>。</span></h2><p class="contact-description">优先考虑医学 AI 软件开发，也欢迎交流<br>企业自动化顾问、AI Agent 与游戏开发机会。</p><div class="contact-directions"><span>医学 AI 软件开发</span><span>业务自动化顾问</span><span>Agent 开发</span><span>游戏开发</span></div></div><div class="contact-card"><span class="contact-card-label">LET’S FIND THE RIGHT FIT</span><h3>聊聊岗位，也聊聊问题。</h3><p id="contact-guidance">如果你通过招聘平台或朋友推荐来到这里，欢迎直接在原渠道联系我。</p><div id="contact-links"></div><button type="button" class="button button-primary" id="copy-intro">复制求职简介 <span aria-hidden="true">↗</span></button><button type="button" class="print-button" id="print-profile">打印 / 保存这份个人简介 <span aria-hidden="true">↓</span></button><p class="action-status" id="action-status" role="status" aria-live="polite"></p></div></div></section>
   </main>
