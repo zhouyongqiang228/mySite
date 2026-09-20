@@ -2,7 +2,7 @@
 (() => {
   const leaf = (id, name, description) => ({ id, name, description });
   window.skillCatalog = {
-    id: 'root', name: '技能概览', en: 'MY KNOWLEDGE TREE',
+    id: 'root', name: '技能概览(主要覆盖软件开发,医学影像,AI模型开发)', en: 'MY KNOWLEDGE TREE',
     description: '以开发为基础，连接医学、AI 模型与多种产品实践。所有分支完整呈现，连接我的技能与项目经验。',
     children: [
       {
