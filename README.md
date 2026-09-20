@@ -8,7 +8,7 @@
 python3 -m http.server 5174 --bind 127.0.0.1
 ```
 
-访问 http://localhost:5174/ 。主样式版本为 v15，技能球脚本与技能目录为 v13，其余资源为 v12。
+访问 http://localhost:5174/ 。主样式版本为 v16，技能球脚本与技能目录为 v13，其余资源为 v12。
 
 ## 内容与来源
 
@@ -28,6 +28,7 @@ python3 -m http.server 5174 --bind 127.0.0.1
 - `styles.css`：响应式和打印布局。
 - `script.js`：导航菜单、当前栏目提示、页脚年份。
 - `assets/`：真实项目截图和视频封面；素材来源记录在独立核对笔记中。
+- `tools/build_resume_pdf.py`：生成适合 HR 阅读的 A4 两页投递版 PDF；生成后复制为网站根目录的 `resume.pdf`，主页按钮可直接下载。
 
 ## 星球抖动修复
 
@@ -53,6 +54,7 @@ git diff --check
 下载页已改为“暂时不提供下载”，并移除两个安装包链接；服务器已通过 HTTPS 重启并验证 `https://autoact.app/download` 返回该状态。
 
 简历已发布到 `https://autoact.app/my/`。Go 服务注册 `/my` 到 `/my/` 的跳转和 `/my/` 静态路由，网页文件（HTML、CSS、JS、favicon 和 assets）部署到服务器专用目录，不包含 README、Git 历史或履历核对笔记。
+HR 投递版 PDF 已发布到 `https://autoact.app/my/resume.pdf`，页面首屏提供“下载 PDF 简历”按钮。
 
 ## 本次内容精简
 
@@ -64,3 +66,9 @@ git diff --check
 - 能力概览已整合进求职方向，桌面端两列、手机端单列；关于我的大字装饰与签名保留。
 
 本次实际 Chrome 检查：简历在 1440、768、390、320px 下无横向溢出，移动导航正常；下载页在 1440、390、320px 下正常。页面无 JavaScript 运行错误；7 段工作经历、9 个项目、51 个技能节点保留，锚点检查通过。
+
+## PDF 投递版维护
+
+安装 `reportlab` 后执行 `python3 tools/build_resume_pdf.py`，再将 `output/pdf/zhou-yongqiang-resume.pdf` 复制到根目录 `resume.pdf`。脚本默认使用 macOS 的 Arial Unicode 字体。更新履历时同步修改网页与 PDF 内容，并重新渲染检查两页排版。
+
+首屏与联系方式处均可下载 PDF；电话、邮箱支持直接打开拨号与邮件应用，保留复制按钮。
