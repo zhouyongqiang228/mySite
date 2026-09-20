@@ -72,7 +72,11 @@
     const perspective = 4.5 / (4.5 - depth);
     return { x: width / 2 + rx * radius * perspective, y: height * .47 - ry * radius * perspective, depth, scale: .82 + (depth + 1) * .12 };
   }
+  let layoutKey = '';
   function layout() {
+    const nextKey = `${stage.clientWidth}:${devicePixelRatio || 1}`;
+    if (nextKey === layoutKey) return;
+    layoutKey = nextKey;
     width = Math.max(1, stage.clientWidth);
     height = Math.max(width, 390);
     radius = Math.min(width * .355, height * .355);
@@ -84,8 +88,13 @@
       node.labelWidth = Math.min(width < 540 ? 90 : 120, Math.max(38, estimated));
       node.element.style.width = `${node.labelWidth}px`;
       node.labelHeight = node.element.offsetHeight || Math.ceil(estimated / node.labelWidth) * (width < 540 ? 13 : 16) + 4;
-      node.label = null;
+      node.element.style.left = '0';
+      node.element.style.top = '0';
     });
+    // Reserve fixed label margins so no edge clamping can change orbital velocity.
+    const maxWidth = Math.max(...leaves.map(node => node.labelWidth));
+    const maxHeight = Math.max(...leaves.map(node => node.labelHeight));
+    radius = Math.max(1, Math.min(radius, (width - maxWidth - 16) / 2 * .97, (height * .53 - 65 - maxHeight - 9) * .97));
     const center = byId.get('root');
     center.element.style.left = `${width / 2}px`; center.element.style.top = `${height - 36}px`;
     center.element.style.width = '110px';
@@ -107,34 +116,17 @@
   }
   function draw() {
     const projected = leaves.map(node => ({ node, ...project(node.position) }));
-    // Labels face the reader; their scale and brightness communicate depth.
-    // Relax nearby labels around their true anchors instead of hiding any skills.
-    const labels = projected.map(p => ({ ...p, lx: p.x, ly: p.y + 9, w: p.node.labelWidth * p.scale, h: p.node.labelHeight * p.scale }));
-    for (let pass = 0; pass < 9; pass++) {
-      for (let i = 0; i < labels.length; i++) for (let j = i + 1; j < labels.length; j++) {
-        const a = labels[i], b = labels[j];
-        const dx = b.lx - a.lx, dy = (b.ly + b.h / 2) - (a.ly + a.h / 2);
-        const overlapX = (a.w + b.w) / 2 + 4 - Math.abs(dx), overlapY = (a.h + b.h) / 2 + 3 - Math.abs(dy);
-        if (overlapX <= 0 || overlapY <= 0) continue;
-        if (overlapY < overlapX) { const push = (dy < 0 ? -1 : 1) * overlapY * .51; a.ly -= push; b.ly += push; }
-        else { const push = (dx < 0 ? -1 : 1) * overlapX * .51; a.lx -= push; b.lx += push; }
-      }
-      labels.forEach(p => {
-        p.lx = Math.max(p.w / 2 + 8, Math.min(width - p.w / 2 - 8, p.lx));
-        p.ly = Math.max(12, Math.min(height - 65 - p.h, p.ly));
-      });
-    }
-    labels.forEach(p => {
-      const old = p.node.label;
-      const smooth = old && !reducedMotion.matches ? .18 : 1;
-      const x = old ? old.x + (p.lx - old.x) * smooth : p.lx;
-      const y = old ? old.y + (p.ly - old.y) * smooth : p.ly;
+    // Stable labels follow their own analytic orbit. Pairwise collision relaxation
+    // flips push direction at crossings, causing discontinuous targets and jitter.
+    // Keep text at a fixed size; depth is represented by continuous opacity only.
+    projected.forEach(p => {
+      const x = p.x;
+      const y = p.y + 9;
       p.node.label = { x, y };
       const style = p.node.element.style;
-      style.left = `${x}px`; style.top = `${y}px`;
-      style.transform = `translateX(-50%) scale(${p.scale})`;
-      style.opacity = String(.4 + (p.depth + 1) * .3);
-      style.zIndex = String(Math.round(100 + p.depth * 50));
+      style.transform = `translate3d(${x - p.node.labelWidth / 2}px, ${y}px, 0)`;
+      const front = Math.max(0, Math.min(1, (p.depth + .15) / .65));
+      style.opacity = String(.12 + .88 * front * front * (3 - 2 * front));
     });
     if (!ctx) return;
     ctx.clearRect(0, 0, width, height);
@@ -180,4 +172,5 @@
   document.addEventListener('visibilitychange', syncAnimation);
   reducedMotion.addEventListener('change', () => { syncAnimation(); draw(); });
   layout();
+  document.fonts?.ready.then(() => { layoutKey = ''; layout(); });
 })();

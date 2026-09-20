@@ -25,7 +25,7 @@
   navLinks.forEach(link => { const target = document.querySelector(link.hash); if (target) sectionObserver.observe(target); });
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  const intro = '你好，我是 Alex，优先寻找医学 AI 软件开发岗位，也关注企业业务自动化顾问、AI Agent 和游戏开发机会。具备解剖学、影像学知识，以及 TensorFlow、C++、Python、Go、Unity、Cocos、Flutter 等技术能力。项目经验覆盖游戏引擎、低代码平台、自研脚本语言、图像视频处理、识图模型、服务器与多平台应用。期待交流岗位需求和具体业务问题。';
+  const intro = '你好，我是周永强 Alex，重点寻找医学影像程序开发、AI 应用与自动化工具开发机会。曾任 Nuat Computer Software LLC CTO，具备独立产品研发、游戏引擎、跨平台客户端与服务端经验。项目包括 AutoAct、Window Fusion、数十个休闲游戏、低代码游戏开发平台、社交应用和数据分析系统。技术涵盖 C++、Python、Go、TensorFlow、Unity、Cocos、Flutter、DirectX 与 OpenGL，也有 ASO 和移动游戏推广经验。持续积累解剖学与影像学知识，希望将图形、模型与软件工程经验用于医学影像工具。期待交流具体岗位与业务需求。';
   const status = document.getElementById('action-status');
   document.getElementById('copy-intro').addEventListener('click', async () => {
     try {
