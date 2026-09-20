@@ -29,7 +29,6 @@
   }
   visit(catalog);
   const leaves = nodes.filter(node => node.leaf);
-  root.querySelector('.tree-count').textContent = `${leaves.length} 项技能与经验 · 持续生长`;
   const goldenAngle = Math.PI * (3 - Math.sqrt(5));
   leaves.forEach((node, i) => {
     const y = 1 - 2 * (i + .5) / leaves.length;
