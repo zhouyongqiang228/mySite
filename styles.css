@@ -241,15 +241,18 @@ h2 { font-size: clamp(28px, 3.2vw, 42px); font-weight: 500; line-height: 1.35; l
 @media (max-width: 800px) { .work-entry { grid-template-columns: 145px minmax(0, 1fr); gap: 22px; } .work-period { font-size: 11px; } }
 @media (max-width: 520px) { .work-entry { grid-template-columns: 1fr; gap: 12px; } .work-entry + .work-entry { margin-top: 28px; } .work-entry + .work-entry .work-period { padding-top: 0; } .work-entry + .work-entry .work-detail { padding-top: 0; } .work-entry + .work-entry .work-detail:before { top: 8px; } .work-detail { padding-left: 20px; padding-bottom: 8px; } .work-detail h3 { font-size: 20px; } }
 @media print { .work-entry { break-inside: avoid; grid-template-columns: 125pt minmax(0, 1fr); gap: 14pt; } .work-company, .work-period, .work-summary, .work-responsibilities { color: #222; } .work-detail { border-color: #aaa; } .work-detail h3 { font-size: 14pt; } }
-@media (min-width: 801px) { .project-card:first-child { grid-column: 1 / -1; display: grid; grid-template-columns: 1.15fr 1fr; align-items: center; } .project-card:first-child .project-media figcaption { border-bottom: 0; } }
-@media print { .project-card:first-child { display: block; } }
+@media (min-width: 801px) { .project-card.project-featured { grid-column: 1 / -1; display: grid; grid-template-columns: 1.15fr 1fr; align-items: center; } .project-card.project-featured .project-media figcaption { border-bottom: 0; } }
+@media print { .project-card.project-featured { display: block; } }
 
 /* Contact details remain readable on mobile and in the printed resume. */
 .contact-details { border-top: 1px solid var(--line); }
 .contact-methods { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
 .contact-methods > div { min-width: 0; padding: 24px; border: 1px solid var(--line); border-radius: 9px; }
 .contact-methods dt { margin-bottom: 12px; color: var(--muted-strong); font-size: 13px; }
-.contact-methods dd { margin: 0; }
-.contact-methods a { color: var(--cyan); font-size: 18px; line-height: 1.6; overflow-wrap: anywhere; text-decoration: underline; text-underline-offset: 4px; }
-@media (max-width: 700px) { .contact-methods { grid-template-columns: 1fr; gap: 16px; } .contact-methods a { font-size: 16px; } }
-@media print { .contact-details { break-inside: avoid; } .contact-methods > div { padding: 10pt; border-color: #aaa; } .contact-methods dt, .contact-methods a { color: #111; } .contact-methods a { font-size: 11pt; } }
+.contact-methods dd { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin: 0; }
+.contact-value { color: var(--cyan); font: 18px/1.6 var(--mono); overflow-wrap: anywhere; }
+.copy-button { padding: 6px 10px; border: 1px solid #397184; border-radius: 4px; color: var(--cyan); background: transparent; font: 10px var(--sans); cursor: pointer; transition: border-color .2s, color .2s, background .2s; }
+.copy-button:hover { border-color: var(--cyan); color: #031218; background: var(--cyan); }
+.copy-button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+@media (max-width: 700px) { .contact-methods { grid-template-columns: 1fr; gap: 16px; } .contact-value { font-size: 16px; } }
+@media print { .contact-details { break-inside: avoid; } .contact-methods > div { padding: 10pt; border-color: #aaa; } .contact-methods dt, .contact-value { color: #111; } .copy-button { color: #111; border-color: #999; } }
