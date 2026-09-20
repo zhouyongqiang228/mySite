@@ -1,1 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#101713"/><path d="M18 43V31a14 14 0 0 1 28 0v12M18 34h28" stroke="#c0efb5" stroke-width="5" fill="none"/><circle cx="47" cy="17" r="4" fill="#c0efb5"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#101713"/><text x="32" y="44" text-anchor="middle" fill="#c0efb5" font-family="sans-serif" font-size="38">周</text></svg>
