@@ -50,9 +50,9 @@ git diff --check
 
 已定位官网源码：`/usr/local/go/src/Servers/serverAll/main`。`main.go` 使用 Go 标准库 `net/http` 注册 `/index`、`/download` 等路由；`handle_download.go` 直接提供 `client/static/autoact/download.html`。修改前下载页与 `https://autoact.app/download` 返回内容的 SHA-1 相同。
 
-本次修改该下载页为“暂时不提供下载”，移除两个安装包链接。只修改本地文件，尚未发布到服务器。
+下载页已改为“暂时不提供下载”，并移除两个安装包链接；服务器已通过 HTTPS 重启并验证 `https://autoact.app/download` 返回该状态。
 
-简历可挂载到 `https://autoact.app/zyq`。部署时将本项目的 HTML、CSS、JS、favicon 和 assets 放入专用静态目录，由 Go 注册 `/zyq/` 静态路由，并将 `/zyq` 重定向到 `/zyq/`，使相对资源地址正常解析。仅发布网页文件，不包含 README、Git 历史或履历核对笔记。本次仅确认可行性，未修改 Go 路由或部署简历。
+简历已发布到 `https://autoact.app/my/`。Go 服务注册 `/my` 到 `/my/` 的跳转和 `/my/` 静态路由，网页文件（HTML、CSS、JS、favicon 和 assets）部署到服务器专用目录，不包含 README、Git 历史或履历核对笔记。
 
 ## 本次内容精简
 
