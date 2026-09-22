@@ -173,6 +173,7 @@ def build():
     story.append(PageBreak())
     story += section("精选项目")
     story += [
+        project("MycodeX", "自研项目", "熟悉 Codex 及其底层运行机制，自主开发 Codex 类 AI 任务执行工具 MycodeX。支持无需登录即可远程控制电脑，并支持长时间持续执行任务。", "Codex 底层机制 · 远程控制 · 持续任务执行"),
         project("类 Unity 引擎 + AI 低代码平台", "2024 - 2026", "研发结合类 Unity 编辑器、运行时预览和 AI 辅助创作的低代码游戏开发平台，让创作者通过场景、节点和组件快速搭建游戏。", "低代码 · 游戏引擎 · AI 应用"),
         project("AutoAct", "2023", "将自然语言指令转化为计算机操作的 AI 应用，支持指令理解、模型调用与任务执行。", "自然语言交互 · AI Agent · 桌面自动化"),
         project("社交软件", "2021 - 2022", "独立开发 Flutter 移动客户端与 Go 服务端，支持 iOS / Android，包含数据库、缓存、消息推送与自研消息队列。", "Flutter · Go · SQL / Redis"),

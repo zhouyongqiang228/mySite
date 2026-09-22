@@ -15,7 +15,8 @@ python3 -m http.server 5174 --bind 127.0.0.1
 - 工作经历替换原有示例，按用户本次提供的信息与旧 PDF 整理。
 - 工作和项目时间统一按年展示，原始月份保留在独立核对资料中；旧 PDF 与后续说明的差异仍需核对。
 - 拟仁公司名采用本次提供的写法；其法定名称和渲染引擎来源尚待核对，正文只描述图形渲染集成工作。
-- 项目包括低代码游戏开发平台、AutoAct、Window Fusion、社交软件、神笔马良 AI 游戏、休闲游戏、数据分析平台、自研 2D 游戏引擎、3D 引擎与类 C 解释型语言。
+- 项目包括 MycodeX、低代码游戏开发平台、AutoAct、Window Fusion、社交软件、神笔马良 AI 游戏、休闲游戏、数据分析平台、自研 2D 游戏引擎、3D 引擎与类 C 解释型语言。
+- MycodeX 按本人提供的信息加入网页与 PDF，突出 Codex 底层机制、免登录远程控制与长时间持续执行任务；未提供项目年份，暂不标注。
 - 医疗健康 AI 应用为首要求职方向，医学影像作为其中的探索领域；关于我将生物竞赛经历与医疗兴趣、当前学习整合表述，不宣称有未经确认的临床交付、医疗资质或效果指标。
 - 未采用旧简历的过时年龄、工龄、期望薪资，以及缺少佐证的榜单与下载成绩。保留有项目支撑的技能、职责、教育与竞赛经历。
 - 参考 PDF 原文及核对笔记单独保存在 `/Users/alex/Documents/ResumeResearch`，不包含在网站内。线上原简历尚未提取成功。
@@ -54,6 +55,7 @@ git diff --check
 下载页已改为“暂时不提供下载”，并移除两个安装包链接；服务器已通过 HTTPS 重启并验证 `https://autoact.app/download` 返回该状态。
 
 简历已发布到 `https://autoact.app/my/`。Go 服务注册 `/my` 到 `/my/` 的跳转和 `/my/` 静态路由，网页文件（HTML、CSS、JS、favicon 和 assets）部署到服务器专用目录，不包含 README、Git 历史或履历核对笔记。
+2026-09-22 发布 MycodeX 时核实：当前运行服务目录为 `/usr/local/go/src/serverAll/main`，简历静态目录为其下的 `client/static/my`，与上述历史源码路径不同。通过 SSH 主机别名 `aliyun` 更新 `index.html` 和 `resume.pdf` 即可，无需重启服务；此次发布前备份位于服务器 `/root/site-backups/my-20260922-234703`。
 HR 投递版 PDF 已发布到 `https://autoact.app/my/resume.pdf`，页面首屏提供“下载 PDF 简历”按钮。
 
 ## 本次内容精简
